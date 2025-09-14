@@ -14,7 +14,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #2a4b8c, #3a6bcc);
+            back:ground: linear-gradient(135deg, #1a2a6c, #2a4b8c, #3a6bcc);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -100,6 +100,163 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             background: rgba(255, 255, 255, 0.25);
         }
+        
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #ff0;
+            box-shadow: 0 0 10px 2px #ff0;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes textBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fireworks {
+            0% { 
+                transform: translate(0, 0); 
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(var(--tx), var(--ty)); 
+                opacity: 0;
+                width: 3px;
+                height: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title" id="title">恭喜！</h1>
+        
+        <div class="text-display">
+            <div class="blur-box" id="blurBox"></div>
+            <div class="dynamic-text" id="dynamicText">?</div>
+        </div>
+        
+        <button class="action-btn" id="actionBtn">撅还是不撅</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dynamicText = document.getElementById('dynamicText');
+            const actionBtn = document.getElementById('actionBtn');
+            const blurBox = document.getElementById('blurBox');
+            const title = document.getElementById('title');
+            
+            let interval;
+            let speed = 100; // 初始切换速度(毫秒)
+            let isRunning = false;
+            
+            // 烟花效果
+            function createFireworks() {
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const firework = document.createElement('div');
+                        firework.classList.add('firework');
+                        
+                        // 随机位置
+                        const startX = Math.random() * window.innerWidth;
+                        const startY = Math.random() * window.innerHeight;
+                        
+                        // 随机方向
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = 50 + Math.random() * 150;
+                        
+                        const tx = Math.cos(angle) * distance;
+                        const ty = Math.sin(angle) * distance;
+                        
+                        firework.style.left = `${startX}px`;
+                        firework.style.top = `${startY}px`;
+                        firework.style.setProperty('--tx', `${tx}px`);
+                        firework.style.setProperty('--ty', `${ty}px`);
+                        
+                        // 随机颜色
+                        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+                        firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        firework.style.boxShadow = `0 0 10px 2px ${firework.style.background}`;
+                        
+                        document.body.appendChild(firework);
+                        
+                        // 动画
+                        firework.style.animation = `fireworks 1s forwards`;
+                        
+                        // 移除元素
+                        setTimeout(() => {
+                            firework.remove();
+                        }, 1000);
+                    }, i * 20);
+                }
+            }
+            
+            // 开始切换文字
+            function startSwitching() {
+                if (isRunning) return;
+                isRunning = true;
+                
+                // 重置状态
+                dynamicText.textContent = Math.random() > 0.5 ? "撅" : "不撅";
+                dynamicText.style.animation = "textBounce 0.1s infinite";
+                blurBox.style.opacity = "0";
+                title.style.opacity = "0";
+                
+                // 初始快速切换
+                interval = setInterval(() => {
+                    dynamicText.textContent = dynamicText.textContent === "撅" ? "不撅" : "撅";
+                }, speed);
+                
+                // 2秒后开始减速
+                setTimeout(() => {
+                    clearInterval(interval);
+                    
+                    // 减速阶段
+                    const slowDownInterval = setInterval(() => {
+                        dynamicText.textContent = dynamicText.textContent === "撅" ? "不撅" : "撅";
+                        speed += 50;
+                        
+                        if (speed > 500) {
+                            clearInterval(slowDownInterval);
+                            
+                            // 最终停在"撅"
+                            setTimeout(() => {
+                                dynamicText.textContent = "撅";
+                                dynamicText.style.animation = "textBounce 0.5s infinite";
+                                
+                                // 显示高斯模糊框
+                                blurBox.style.opacity = "1";
+                                blurBox.style.width = "180px";
+                                blurBox.style.height = "180px";
+                                
+                                // 显示恭喜文字
+                                title.style.opacity = "1";
+                                
+                                // 放烟花
+                                createFireworks();
+                                
+                                isRunning = false;
+                            }, 1000);
+                        }
+                    }, speed);
+                }, 2000);
+            }
+            
+            // 按钮点击事件
+            actionBtn.addEventListener('click', startSwitching);
+        });
+    </script>
+</body>
+</html>        }
         
         .firework {
             position: absolute;
