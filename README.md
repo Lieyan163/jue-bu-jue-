@@ -14,7 +14,7 @@
         }
         
         body {
-            back:ground: linear-gradient(135deg, #1a2a6c, #2a4b8c, #3a6bcc);
+            background: linear-gradient(135deg, #1a2a6c, #2a4b8c, #3a6bcc);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -256,68 +256,4 @@
         });
     </script>
 </body>
-</html>        }
-        
-        .firework {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: #ff0;
-            box-shadow: 0 0 10px 2px #ff0;
-            opacity: 0;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes textBounce {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes fireworks {
-            0% { 
-                transform: translate(0, 0); 
-                opacity: 1;
-            }
-            100% { 
-                transform: translate(var(--tx), var(--ty)); 
-                opacity: 0;
-                width: 3px;
-                height: 3px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="title" id="title">恭喜！</h1>
-        
-        <div class="text-display">
-            <div class="blur-box" id="blurBox"></div>
-            <div class="dynamic-text" id="dynamicText">?</div>
-        </div>
-        
-        <button class="action-btn" id="actionBtn">撅还是不撅</button>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dynamicText = document.getElementById('dynamicText');
-            const actionBtn = document.getElementById('actionBtn');
-            const blurBox = document.getElementById('blurBox');
-            const title = document.getElementById('title');
-            
-            let interval;
-            let speed = 100; // 初始切换速度(毫秒)
-            let isRunning = false;
-            
-            // 烟花效果
-            function createFireworks() {
-                for (let i = 0; i < 50; i++) {
-                    setTimeout(() => {
-                  
+</html>
